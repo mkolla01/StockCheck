@@ -24,7 +24,7 @@ public class StacksDao {
 	        .withQueryOptions(qOptions)
 	        .withRetryPolicy(new LoggingRetryPolicy(DefaultRetryPolicy.INSTANCE))
 	        .withReconnectionPolicy(new ConstantReconnectionPolicy(TimeUnit.SECONDS.toMillis(5))).build();
-	              
+	        // something      
 	
 } finally { if ( cluster != null) {cluster.close() ; }
 }

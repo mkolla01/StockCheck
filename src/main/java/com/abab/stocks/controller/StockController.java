@@ -34,6 +34,7 @@ public class StockController {
 			return new ResponseEntity<List<Stocks>>( HttpStatus.UNAUTHORIZED);
 			
 		}
+		//fwfff
 		return new ResponseEntity<List<Stocks>>(list, HttpStatus.OK);
 	}
 	

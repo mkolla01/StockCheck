@@ -1,9 +1,13 @@
 package com.abab.stocks.dao;
 
 import java.util.ArrayList;
+import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
+import org.springframework.stereotype.Service;
+
 import com.abab.stocks.domain.Stocks;
+import com.abab.stocks.utilities.StockUtilities;
 import com.datastax.driver.core.Cluster;
 import com.datastax.driver.core.ConsistencyLevel;
 import com.datastax.driver.core.QueryOptions;
@@ -11,23 +15,21 @@ import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Row;
 import com.datastax.driver.core.Session;
 import com.datastax.driver.core.policies.ConstantReconnectionPolicy;
-import com.datastax.driver.core.policies.DCAwareRoundRobinPolicy;
 import com.datastax.driver.core.policies.DefaultRetryPolicy;
 import com.datastax.driver.core.policies.LoggingRetryPolicy;
-import com.datastax.driver.core.querybuilder.Insert;
-import com.datastax.driver.core.querybuilder.QueryBuilder;
-
+@Service("stockDao")
 public class StocksDao {
 
 	public Cluster  createCluster (Cluster cluster) throws Exception {
 		
-	
+	Properties prop = StockUtilities.readProperties("database");
 	try{
+		
 		QueryOptions qOptions = new QueryOptions().setConsistencyLevel(ConsistencyLevel.LOCAL_QUORUM);
 	
 		 cluster = Cluster.builder()
-	        .addContactPoint("35.194.9.188")
-	        .withCredentials("cassandra", "cassandra")
+	        .addContactPoint(prop.getProperty("db.cassandra.contactpoint"))
+	        .withCredentials(prop.getProperty("db.user.name"), prop.getProperty("db.user.password"))
 	        .withQueryOptions(qOptions)
 	        .withRetryPolicy(new LoggingRetryPolicy(DefaultRetryPolicy.INSTANCE))
 	        .withReconnectionPolicy(new ConstantReconnectionPolicy(TimeUnit.SECONDS.toMillis(5))).build();
